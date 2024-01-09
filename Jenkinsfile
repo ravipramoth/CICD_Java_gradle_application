@@ -13,7 +13,7 @@ pipeline {
                     // sh './gradlew sonarqube'
                     sh ''' $SCANNER_HOME/bin/sonar-scanner -Dsonar.projectName=gradel -Dsonar.login=admin \
                     -Dsonar.projectKey=gradeel -Dsonar.sources=src/main -Dsonar.password=admin@123 \
-                    -Dsonar.test=src/test \
+                    -Dsonar.test=src/test -Dsonar.exclusions=**/*.java \
                     -Dsonar.exclusions=build/** '''
 
                }
