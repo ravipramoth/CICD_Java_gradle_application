@@ -8,7 +8,7 @@ pipeline {
         stage("sonar-scanner") {
             steps{
                 script{
-                    withSonarQubeEnv(credentialsId: 'snoar-token') {
+                    withSonarQubeEnv('sonar-server ') {
                     sh ''' $SCANNER_HOME/bin/sonar-scanner -Dsonar.projectName=gradel \
                     -Dsonar.projectKey=gradeel '''
 
