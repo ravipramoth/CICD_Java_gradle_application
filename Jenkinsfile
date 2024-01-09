@@ -1,15 +1,21 @@
-pipeline {
+pipeline{
     agent any 
-    environment {
-        SCANNER_HOME = tool 'sonar-tool'
+    environment{
         VERSION = "${env.BUILD_ID}"
     }
-    stages {
-        stage("sonar-scanner") {
-            steps {
-                script {
-                    withSonarQubeEnv(credentialsId: 'snoar-token') {
-                        sh """
+    stages{
+        stage("sonar quality check"){
+            agent {
+                docker {
+                    image 'openjdk:11'
+                }
+            }
+            steps{
+                script{
+                    withSonarQubeEnv(credentialsId: 'sonar-token') {
+                            sh 'chmod +x gradlew'
+                            sh './gradlew sonarqube'
+                             sh """
                             ${SCANNER_HOME}/bin/sonar-scanner \
                             -Dsonar.projectName=gradel \
                             -Dsonar.projectKey=gradeel \
@@ -19,18 +25,17 @@ pipeline {
                             -Dsonar.tests=src/test \
                             -Dsonar.exclusions=**/*.java
                         """
-                    }
-                    
-                }
-            }
-        }
 
-stage("Quality Gate") {
-            steps {
-                script {
-                    sh 'mvn clean install -DskipTests'
-            }
-  
+                    }
+
+                    timeout(time: 1, unit: 'HOURS') {
+                      def qg = waitForQualityGate()
+                      if (qg.status != 'OK') {
+                           error "Pipeline aborted due to quality gate failure: ${qg.status}"
+                      }
+                    }
+
+                }  
             }
         }
     }
