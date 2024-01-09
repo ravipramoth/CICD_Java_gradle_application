@@ -2,7 +2,7 @@ pipeline {
     agent any 
     environment {
         SCANNER_HOME=tool 'sonar-tool'
-        VERSION = {env.BUILD_ID}
+        VERSION = {"env.BUILD_ID"}
             }
     stages{
         stage("sonar-scanner") {
