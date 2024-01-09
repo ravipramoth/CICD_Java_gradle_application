@@ -12,7 +12,8 @@ pipeline {
                     // sh 'chmod +x gradlew'
                     // sh './gradlew sonarqube'
                     sh ''' $SCANNER_HOME/bin/sonar-scanner -Dsonar.projectName=gradel \
-                    -Dsonar.projectKey=gradeel '''
+                    -Dsonar.projectKey=gradeel -Dsonar.sources="src/main" \
+                    -Dsonar.test="src/test '''
 
                }
             }
