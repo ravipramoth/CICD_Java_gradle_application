@@ -9,7 +9,7 @@ pipeline {
             steps{
                 script{
                     withSonarQubeEnv(credentialsId: 'snoar-token') {
-                    sh 'sudo chmod +x gradlew'
+                    sh 'chmod +x gradlew'
                     sh './gradlew sonarqube'
                     sh ''' $SCANNER_HOME/bin/sonar-scanner -Dsonar.projectName=gradel \
                     -Dsonar.projectKey=gradeel '''
