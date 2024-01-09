@@ -28,8 +28,7 @@ stage("Quality Gate") {
             steps {
                 timeout(time: 1, unit: 'HOURS') {
                     script {
-                        echo "Checking status of SonarQube task '${VERSION}' on server '${SONARQUBE_SERVER_URL}'"
-                        def qg = waitForQualityGate()
+                     def qg = waitForQualityGate()
                         if (qg.status != 'OK') {
                             error "Pipeline aborted due to quality gate failure: ${qg.status}"
                         }
