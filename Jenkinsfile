@@ -8,7 +8,7 @@ pipeline {
         stage("sonar-scanner") {
             steps {
                 script {
-                    withSonarQubeEnv(credentialsId: 'snoar-token') {
+                    withSonarQubeEnv(credentialsId: 'sonar-token') {
                         sh """
                             ${SCANNER_HOME}/bin/sonar-scanner \
                             -Dsonar.projectName=gradel \
@@ -21,10 +21,17 @@ pipeline {
                         """
                     }
                 }
+            }
+        }
+
+        stage("Quality Gate") {
+            steps {
                 timeout(time: 1, unit: 'HOURS') {
-                    def qg = waitForQualityGate()
-                    if (qg.status != 'OK') {
-                        error "Pipeline aborted due to quality gate failure: ${qg.status}"
+                    script {
+                        def qg = waitForQualityGate()
+                        if (qg.status != 'OK') {
+                            error "Pipeline aborted due to quality gate failure: ${qg.status}"
+                        }
                     }
                 }
             }
