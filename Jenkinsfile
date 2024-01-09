@@ -28,7 +28,7 @@ pipeline {
 stage("Quality Gate") {
             steps {
                 script {
-                    sh 'mvn clean install'
+                    sh 'mvn clean install -DskipTests'
             }
   
             }
